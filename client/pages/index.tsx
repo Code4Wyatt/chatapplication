@@ -4,7 +4,7 @@ import styles from "../styles/Home.module.css";
 import RoomsContainer from "../containers/Rooms";
 import MessagesContainer from "../containers/Messages";
 import { useSockets } from "../context/socket.context";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export default function Home() {
   const { socket, username, setUsername } = useSockets();
@@ -20,6 +20,13 @@ export default function Home() {
 
     localStorage.setItem("username", value);
   }
+
+  useEffect(() => {
+    if (usernameRef) {
+      usernameRef.current.value = localStorage.getItem("username") || "";
+    }
+    
+  }, [])
 
   return (
     <div>

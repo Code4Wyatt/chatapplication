@@ -40,6 +40,7 @@ function SocketsProvider(props: any) {
     setMessages([])
 });
 
+useEffect(() => {
   socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
       if (!document.hasFocus()) {
           document.title = "New message!"
@@ -47,6 +48,7 @@ function SocketsProvider(props: any) {
 
       setMessages([...messages, { message, username, time }])
   })
+}, [socket]);
 
   return (
     <SocketContext.Provider
