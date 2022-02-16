@@ -7,6 +7,8 @@ interface Context {
   socket: Socket;
   username?: string;
   setUsername: Function;
+  messages?: {message: string, time: string, username: string}[];
+  setMessages: Function;
   roomId?: string;
   rooms: object;
 }
@@ -16,6 +18,7 @@ const socket = io(SOCKET_URL);
 const SocketContext = createContext<Context>({
   socket,
   setUsername: () => false,
+  setMessages: () => false,
   rooms: {},
 });
 
@@ -31,9 +34,13 @@ function SocketsProvider(props: any) {
     setMessages([])
 });
 
+  socket.on(EVENTS.SERVER.ROOM_MESSAGE, ({ message, username, time }) => {
+      setMessages([...messages, { message, username, time }])
+  })
+
   return (
     <SocketContext.Provider
-      value={{ socket, username, setUsername, rooms, roomId }}
+      value={{ socket, username, setUsername, rooms, roomId, messages, setMessages }}
       {...props}
     />
   );
