@@ -1,6 +1,7 @@
 import io, { Socket } from "socket.io-client";
 import { SOCKET_URL } from "../config/default";
 import { createContext, useContext, useState } from "react";
+import EVENTS from "../config/events";
 
 interface Context {
   socket: Socket;
@@ -22,8 +23,13 @@ function SocketsProvider(props: any) {
   const [username, setUsername] = useState("");
   const [roomId, setRoomId] = useState("");
   const [rooms, setRooms] = useState({});
+  const [messages, setMessages] = useState([])
 
-  socket.on(EVENTS.SERVER.ROOMS, (value) => {});
+  socket.on(EVENTS.SERVER.ROOMS, (value) => {setRooms(value)});
+
+  socket.on(EVENTS.SERVER.JOINED_ROOM, (value) => {setRoomId(value)
+    setMessages([])
+});
 
   return (
     <SocketContext.Provider
